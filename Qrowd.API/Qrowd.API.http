@@ -1,0 +1,6 @@
+@Qrowd.API_HostAddress = http://localhost:5182
+
+GET {{Qrowd.API_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
