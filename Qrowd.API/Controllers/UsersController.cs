@@ -1,12 +1,15 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Qrowd.Domain.Entities;
 using Qrowd.Infrastructure.Data;
+using System.Security.Claims;
 
 namespace Qrowd.API.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
+    [Authorize]
     public class UsersController : ControllerBase
     {
         private readonly QrowdDbContext _context;
@@ -31,6 +34,17 @@ namespace Qrowd.API.Controllers
             if (user == null) return NotFound();
             return user;
         }
+
+        [HttpGet("me")]
+        public IActionResult GetProfile()
+        {
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            var userName = User.Identity?.Name;
+            var role = User.FindFirst(ClaimTypes.Role)?.Value;
+
+            return Ok(new { userId, userName, role });
+        }
+
 
         // POST: api/users
         [HttpPost]

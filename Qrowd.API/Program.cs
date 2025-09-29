@@ -1,8 +1,14 @@
-using Microsoft.AspNetCore.Authentication.JwtBearer;
+﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.EntityFrameworkCore; // ✅ EF Core için ekle
 using Microsoft.IdentityModel.Tokens;
+using Qrowd.Infrastructure.Data; // ✅ DbContext için ekle
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
+
+// 🔑 DbContext ekle
+builder.Services.AddDbContext<QrowdDbContext>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("ConnectionStrings")));
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
